@@ -1,29 +1,30 @@
 <div class="header">
-	<h1> Complete List for All Polls </h1>
+	<h1>Complete List of All Polls</h1>
 </div>
 
 <div class="row">
 	<div class="col-xs-5">
-		<!-- create a button for creating a new Poll  -->
-		<a href="#/newPoll" class="btn btn-default"> New Poll </a>
+		<a href="#/polls/new" class="btn btn-default">
+			<span class="glyphicon glyphicon-plus"></span> New Poll
+		</a>
 	</div>
-
 	<div class="col-xs-7">
-		<!-- create a input box for searching certain poll -->
-		<input type="text" class="form-control" ng-model="query">
+		<input type="text" class="form-control" ng-model="query" placeholder="Search for a poll" autofocus>
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-xs-12"><hr></div>
+</div>
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
-		<!-- This means there are no polls in the DB right now -->
-		<li> No polls in the DB!! If you want, you can create a <a href="#/newPoll" > New Poll </a> now!</li> 
+		<li><em>There are no polls in the DB right now. 
+				If you like, you can <a href="#/polls/new">create one</a>.
+		</li>
 	</ul>
-
 	<ul ng-switch-default>
-		<li ng-repeat="poll in pollls | filter:query">
-			<a href="#/poll/{{poll._id}}">{{poll.question}}</a>
+		<li ng-repeat="poll in polls | filter:query">
+			<a href="#/polls/{{poll._id}}">{{poll.question}}</a>
 		</li>
 	</ul>
 </div>
-
