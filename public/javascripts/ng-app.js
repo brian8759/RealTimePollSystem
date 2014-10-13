@@ -20,7 +20,7 @@ polls.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/newPoll.html',
 		controller: 'CreateNewPollController'
 	}).
-	otherwise{{
+	otherwise({
 		redirectTo: '/polls'
-	}};
+	});
 }]);

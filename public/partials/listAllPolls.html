@@ -4,19 +4,19 @@
 
 <div class="row">
 	<div class="col-xs-5">
-		<!--> create a button for creating a new Poll  <-->
+		<!-- create a button for creating a new Poll  -->
 		<a href="#/new" class="btn btn-default"> New Poll </a>
 	</div>
 
 	<div class="col-xs-7">
-		<!--> create a input box for searching certain poll <-->
+		<!-- create a input box for searching certain poll -->
 		<input type="text" class="form-control" ng-model="query" placeholder="Search for a poll">
 	</div>
 </div>
 
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
-		<!--> This means there are no polls in the DB right now<-->
+		<!-- This means there are no polls in the DB right now -->
 		<li> No polls in the DB!! If you want, you can create a <a href="#/new" > New Poll </a> now!</li> 
 	</ul>
 
