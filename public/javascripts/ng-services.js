@@ -1,5 +1,5 @@
 "use strict";
-
+// create a new service 'Poll'
 var pollServices = angular.module('pollServices', ['ngResource']);
 
 pollServices.factory('Poll', function($resource) {
