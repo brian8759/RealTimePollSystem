@@ -62,19 +62,28 @@ router.get('/polls/:id', function(req, res) {
 
 /* Create a new Poll */
 router.post('/polls', function(req, res) {
+	// get the req content
+	var content = req.body;
+	// apply this filter to choices[], we only want non-empty text
+	var choices = content.choices.filter(function(v) {
+		return v.text != '';
+	});
+	// build up the pollObj
+	var pollObj = {
+		question: content.question,
+		choices: choices
+	};
 
+	// create a poll model object to insert into MongoDB
+	var poll = new Poll(pollObj);
+	// save this into MongoDB
+	poll.save(function(err, doc) {
+		if(err || !doc) {
+			res.status(500).json({ status: 'failure' });
+		} else {
+			res.json(doc);
+		}
+	});
 });
 
 module.exports = router;
-
-
-// Main App Page
-app.get('/', routes.index);
-
-// MongoDB API Routes
-app.get('/polls/polls', routes.list);
-app.get('/polls/:id', routes.poll);
-app.post('/polls', routes.create);
-app.post('/vote', routes.vote);
-
-io.sockets.on('connection', routes.vote);

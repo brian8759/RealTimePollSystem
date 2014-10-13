@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
-//mongoose.connect('mongodb://localhost:27017/RealTimePollSystem');
+mongoose.connect('mongodb://localhost:27017/RealTimePollSystem');
 
-var myConnection = mongoose.createConnection('mongodb://localhost:27017', 'RealTimePollSystem');
+//mongoose.connect('mongodb://localhost:27017/');
 
-module.exports = myConnection;
+module.exports = mongoose.connection;

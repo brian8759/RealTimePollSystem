@@ -1,0 +1,29 @@
+<div class="header">
+	<h1> Detail Info </h1>
+</div>
+
+<div>
+	<strong> Question </strong><br>
+	{{poll.question}}<br>
+</div>
+
+<div ng-show="poll.voted">
+	<table class="result-table">
+		<tr ng-repeat="choice in poll.choices">
+			<td>{{choice.text}}</td>
+			<td>{{choice.votes.length}}</td>
+		</tr>
+	</table>
+
+	<p>
+		<em>
+			{{poll.total}} votes so far.
+			<span ng-show="poll.userChoice"> 
+				You voted for <strong>{{poll.userChoice.text}}</strong>
+			</span>
+		</em>
+	</p>
+
+	<p><a href="#/polls" class="btn btn-default" role="button"> Back to Total List</a></p>
+</div>
+
