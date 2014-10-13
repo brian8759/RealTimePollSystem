@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var debug = require('debug')('RealTimePollSystem');
 var app = require('../app');
+var db = require('../db');
 
 app.set('port', process.env.PORT || 3000);
 
