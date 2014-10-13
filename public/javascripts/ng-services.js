@@ -1,0 +1,11 @@
+"use strict";
+
+var pollServices = angular.module('pollServices', ['ngResource']);
+
+pollServices.factory('Poll', function($resource) {
+	return $resource('polls/:pollId', {}, {
+		query: {
+			method: 'GET', params: { pollId: 'polls' }, isArray: true
+		}
+	});
+});
