@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var voteSchema = new Schema({
-	ip: {type: String, required: true}
+	ip: String
 });
 
 var choiceSchema = new Schema({

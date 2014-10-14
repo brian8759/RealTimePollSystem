@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 var debug = require('debug')('RealTimePollSystem');
 var app = require('../app');
-var server = require('http').Server(app);
+var http = require('http');
+var server = http.createServer(app);
 var db = require('../db');
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
+// This is for combining Express 4 with Socket.io, following one method from stackoverflow
 require('../sockets')(io);
 
 app.set('port', process.env.PORT || 3000);

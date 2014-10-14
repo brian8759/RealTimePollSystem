@@ -30,7 +30,7 @@ router.get('/polls/:id', function(req, res) {
 		if(err) {
 			res.status(500).json({ status: 'failure' });
 		} else {
-			// we can simply send it back, res.json(poll), or we can add something more
+			
 			var voted = false;
 			var total = 0;
 			var userChoice;
@@ -43,7 +43,8 @@ router.get('/polls/:id', function(req, res) {
 					var vote = choice.votes[v];
 					total++;
 					// check if current user vote this
-					if(vote.ip === (req.header('x-forwarded-for') || req.ip)) {
+					if(vote.ip === (req.header('x-forwarded-for') || req.ip || 
+									req.connection.remoteAddress)) {
 						voted = true;
 						userChoice = { _id: choice._id, text: choice.text };
 					}
@@ -77,7 +78,7 @@ router.post('/polls', function(req, res) {
 	// create a poll model object to insert into MongoDB
 	var poll = new Poll(pollObj);
 	// save this into MongoDB
-	poll.save(function(err, doc) {
+	poll.save(function(err, doc, numAffected) {
 		if(err || !doc) {
 			res.status(500).json({ status: 'failure' });
 		} else {
@@ -88,42 +89,57 @@ router.post('/polls', function(req, res) {
 
 var vote = function(socket) {
 	socket.on('send:vote', function(data) {
+		// Here data is in this format
+		//{ 
+		//	poll_id: '543d434134a18ab62f2a2479',
+  		//  choice: '543d434134a18ab62f2a247a' 
+  		//}
 		// get the ip address
-		var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
+		//var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
+		// hard code to test system functionality.
+		var ip = "127.0.0.1";
+		console.log(ip);
 		// retrieve the corresponding poll from DB
-		Poll.findById(data.poll_id, '', function(err, poll) {
+		Poll.findById(data.poll_id, function(err, poll) {
+			console.log(data);
 			// get the corresponding choice from data.choice
 			var choice = poll.choices.filter(function(v) {
-				return v.text === data.choice.text;
+				// comparing the ObjectID
+				return v._id.equals(data.choice);
 			})[0];
 			console.log(choice);
 			// record the user_ip
 			choice.votes.push({ ip: ip });
 
 			poll.save(function(err, doc) {
-				var toBeSaved = {
+				if(err) {
+					console.log(err);
+				} else {
+					var toBeSaved = {
 					question: doc.question, _id: doc._id, choices: doc.choices,
 					voted: false, total: 0
-				};
+					};
 
-				for(c in doc.choices) {
-					var choice = doc.choices[c];
+					for(c in doc.choices) {
+						var choice = doc.choices[c];
 
-					for(v in choice.votes) {
-						var vote = choice.votes[v];
-						toBeSaved.total++;
-						toBeSaved.ip = ip;
+						for(v in choice.votes) {
+							var vote = choice.votes[v];
+							toBeSaved.total++;
+							toBeSaved.ip = ip;
 
-						if(vote.ip === ip) {
-							toBeSaved.voted = true;
-							toBeSaved.userChoice = {
+							if(vote.ip === ip) {
+								toBeSaved.voted = true;
+								toBeSaved.userChoice = {
 								_id: choice._id, 
 								text: choice.text
-							};
-						}
+								};
+							}
 
+						}	
 					}
 				}
+				
 			});
 		});
 	});
