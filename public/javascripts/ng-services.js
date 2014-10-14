@@ -3,7 +3,7 @@
 var pollServices = angular.module('pollServices', ['ngResource']);
 
 pollServices.factory('Poll', function($resource) {
-	return $resource('polls/:pollId', {}, {
+	return $resource('pollTest/:pollId', {}, {
 		//define a query method
 		query: {
 			method: 'GET', params: { pollId: 'polls' }, isArray: true

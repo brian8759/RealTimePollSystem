@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 });
 
 /* List all the polls in DB */
-router.get('/polls/polls', function(req, res) {
+router.get('/pollTest/polls', function(req, res) {
 	// Just do a normal query to MongoDB, find all polls, and do a projection on question
 	Poll.find({}, 'question', function(err, polls) {
 		if(err) {
@@ -21,7 +21,7 @@ router.get('/polls/polls', function(req, res) {
 });
 
 /* Retrieve a single poll */
-router.get('/polls/:id', function(req, res) {
+router.get('/pollTest/:id', function(req, res) {
 	// get the id of the poll
 	var pollId = req.params.id;
 	// use this pollId to do a query, we keep all the attributes, no projection
@@ -62,7 +62,7 @@ router.get('/polls/:id', function(req, res) {
 });
 
 /* Create a new Poll */
-router.post('/polls', function(req, res) {
+router.post('/pollTest', function(req, res) {
 	// get the req content
 	var content = req.body;
 	// apply this filter to choices[], we only want choice with non-empty text
