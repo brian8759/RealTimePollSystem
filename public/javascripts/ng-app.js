@@ -12,11 +12,11 @@ polls.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/listAllPolls.html',
 		controller: 'PollListController'
 	}).
-	when('/polls/:pollId', {
+	when('/poll/:pollId', {
 		templateUrl: 'partials/details.html',
 		controller: 'PollDetailsController'
 	}).
-	when('/polls/new', {
+	when('/new', {
 		templateUrl: 'partials/newPoll.html',
 		controller: 'CreateNewPollController'
 	}).

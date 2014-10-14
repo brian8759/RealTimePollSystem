@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-xs-5">
-		<a href="#/polls/new" class="btn btn-default">
+		<a href="#/new" class="btn btn-default">
 			<span class="glyphicon glyphicon-plus"></span> New Poll
 		</a>
 	</div>
@@ -19,7 +19,7 @@
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
 		<li><em>There are no polls in the DB right now. 
-				If you like, you can <a href="#/polls/new">create one</a>.
+				If you like, you can <a href="#/new">create one</a>.
 		</li>
 	</ul>
 	<ul ng-switch-default>
