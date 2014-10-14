@@ -1,3 +1,10 @@
+/**
+* Three controllers defined in this file, 
+* The first one is "PollListController", for listing all the polls stored in the DB
+* The second one is "CreateNewPollController", for creating a new poll, and save it into DB
+* The third one is "PollDetailsController", for checking the detail info of certain poll
+*/
+
 "use strict";
 
 var pollControllers = angular.module('pollControllers', ['ngAnimate']);
@@ -6,12 +13,6 @@ var pollControllers = angular.module('pollControllers', ['ngAnimate']);
 pollControllers.controller('PollListController', ['$scope', 'Poll', 
   function($scope, Poll) {
     $scope.polls = Poll.query();
-}]);
-
-// the controller for listing the detail info of certain poll
-pollControllers.controller('PollDetailsController', ['$scope', '$routeParams', 'Poll', 
-  function($scope, $routeParams, Poll) {
-    $scope.poll = Poll.get({ pollId: $routeParams.pollId });
 }]);
 
 // the controller for creating a new poll
@@ -23,7 +24,7 @@ pollControllers.controller('CreateNewPollController', ['$scope', '$location', 'P
       // because a meaningful question at least needs to have two choices
       choices: [ { text: '' }, { text: '' } ]
     };
-    // define a method
+    // define a method, for adding more choice into choices[]
     $scope.addChoice = function() {
       $scope.poll.choices.push({ text: '' });
     };
@@ -35,6 +36,7 @@ pollControllers.controller('CreateNewPollController', ['$scope', '$location', 'P
       if(poll.question.length <= 0) {
         alert('You must enter a valid question!');
       } else {
+        // create a obj to be saved
         var newPoll = new Poll(poll);
         newPoll.$save(function(res, resp) {
           if(!res.error) {
@@ -44,5 +46,42 @@ pollControllers.controller('CreateNewPollController', ['$scope', '$location', 'P
           }
         });
       }
+    };
+}]);
+
+// the controller for listing the detail info of certain poll
+pollControllers.controller('PollDetailsController', ['$scope', '$routeParams', 'Poll', 'Socket',
+  function($scope, $routeParams, Poll, Socket) {
+    $scope.poll = Poll.get({ pollId: $routeParams.pollId });
+
+    Socket.on('myVote', function(data) {
+      console.dir(data);
+      if(data._id === $routeParams.pollId) {
+        $scope.poll = data;
+      }
+    });
+
+    Socket.on('vote', function(data) {
+      console.dir(data);
+      if(data._id === $routeParams.pollId) {
+        $scope.poll.choices = data.choices;
+        $scope.poll.total = data.total;
+      }
+    });
+
+    $scope.vote = function() {
+      var pollId = $scope.poll._id;
+      var userVote = $scope.poll.userVote;
+
+      if(userVote) {
+        var voteObj = {
+          poll_id: pollId,
+          choice: userVote
+        };
+        Socket.emit('send:vote', voteObj);
+      } else {
+        alert('You must to do meaningful vote!');
+      }
+
     };
 }]);

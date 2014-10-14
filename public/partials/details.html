@@ -3,8 +3,28 @@
 </div>
 
 <div>
-	<strong> Question </strong><br>
+	<strong><em> Question </em></strong><br>
 	{{poll.question}}<br>
+</div>
+
+<!-- if user has voted, then it will be hidden -->
+<div ng-hide="poll.voted">
+	<p> Please vote now! </p>
+	<form role="form" ng-submit="vote()">
+		<div ng-repeat="choice in poll.choices">
+			<label>
+				<input type="radio" name="choice" ng-model="poll.userVote" value="{{choice._id}}">
+				{{choice.text}}
+			</label>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<a href="#/polls" class="btn btn-default" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Back to Total List</a>
+			</div>
+			<div class="col-xs-6">
+				<button class="btn btn-primary pull-right" type="submit">Vote &raquo;</button>
+			</div>
+		</div>
 </div>
 
 <div ng-show="poll.voted">
@@ -24,6 +44,6 @@
 		</em>
 	</p>
 
-	<p><a href="#/polls" class="btn btn-default" role="button"> Back to Total List</a></p>
+	<p><a href="#/polls" class="btn btn-default" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Back to Total List</a></p>
 </div>
 
