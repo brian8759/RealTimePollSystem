@@ -1,3 +1,4 @@
+<section class="pollPage">
 <div class="header">
 	<h1>Complete List of All Polls</h1>
 </div>
@@ -8,8 +9,24 @@
 			<span class="glyphicon glyphicon-plus"></span> New Poll
 		</a>
 	</div>
-	<div class="col-xs-7">
+	<div class="col-xs-9">
+		<label> Search: </label>
 		<input type="text" class="form-control" ng-model="query" placeholder="Search for a poll" autofocus>
+
+		<label class="form-group"> by:
+			<select ng-model="pollOrder">
+				<option value="question">Question</option>
+			</select>
+		</label>
+
+		<label class="form-group">
+			<input type="radio" ng-model="direction" name="direction" checked>
+			ascending
+		</label>
+		<label class="form-group">
+			<input type="radio" ng-model="direction" name="direction" value="reverse">
+			descending
+		</label>
 	</div>
 </div>
 
@@ -23,8 +40,11 @@
 		</li>
 	</ul>
 	<ul ng-switch-default>
-		<li ng-repeat="poll in polls | filter:query">
-			<a href="#/polls/{{poll._id}}">{{poll.question}}</a>
+		<!-- apply the user input filtering keyword -->
+		<li ng-repeat="poll in polls | filter:query | orderBy: pollOrder:direction">
+			<!-- provide a link to check the detail information of this poll -->
+			<a href="#/poll/{{poll._id}}">{{poll.question}}</a>
 		</li>
 	</ul>
 </div>
+</section>
