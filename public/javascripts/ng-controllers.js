@@ -10,9 +10,26 @@
 var pollControllers = angular.module('pollControllers', ['ngAnimate']);
 
 // the controller for listing all polls in the database
-pollControllers.controller('PollListController', ['$scope', 'Poll', 
-  function($scope, Poll) {
+pollControllers.controller('PollListController', ['$scope', 'Poll', 'filterFilter', 
+  function($scope, Poll, filterFilter) {
     $scope.polls = Poll.query();
+
+    $scope.itemsPerPage = 6;
+    $scope.currentPage = 1;
+
+    $scope.polls.$promise.then(function () {
+      $scope.totalItems = $scope.polls.length;
+      $scope.maxSize = 5;
+      $scope.$watch('query', function (newQuery, oldQuery) {
+        $scope.currentPage = 1;
+        //$scope.filteredPolls = $filter('filter')($scope.polls, $scope.query);
+        $scope.filteredPolls = filterFilter($scope.polls, {question: $scope.query});
+        $scope.noOfPages = $scope.filteredPolls.length / $scope.itemsPerPage;
+        if(newQuery !== oldQuery) {
+            $scope.totalItems = $scope.filteredPolls.length;
+        }
+    });
+  });
 }]);
 
 // the controller for creating a new poll

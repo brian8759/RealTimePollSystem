@@ -33,6 +33,7 @@
 <div class="row">
 	<div class="col-xs-12"><hr></div>
 </div>
+
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
 		<li><em>There are no polls in the DB right now. 
@@ -41,10 +42,17 @@
 	</ul>
 	<ul ng-switch-default>
 		<!-- apply the user input filtering keyword -->
-		<li ng-repeat="poll in polls | filter:query | orderBy: pollOrder:direction">
+		<li ng-repeat="poll in filteredPolls | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage | orderBy: pollOrder:direction">
 			<!-- provide a link to check the detail information of this poll -->
 			<a href="#/poll/{{poll._id}}">{{poll.question}}</a>
 		</li>
 	</ul>
+	<pagination total-items="totalItems" items-per-page="itemsPerPage" max-size="maxSize" ng-model="currentPage" class="		pagination-small" boundary-links="true">
+	</pagination>
+    	<p>
+      		total Items: {{totalItems}}<br />
+      		Items per page: {{itemsPerPage}}<br />
+      		Current Page: {{currentPage}}
+      	</p>
 </div>
 </section>
