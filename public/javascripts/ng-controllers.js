@@ -47,12 +47,26 @@ pollControllers.controller('CreateNewPollController', ['$scope', '$location', 'P
       $scope.poll.choices.push({ text: '' });
     };
 
+    function duplicateChoices() {
+      var array = [];
+      $scope.poll.choices.forEach(function(choice) {
+        array.push(choice.text);
+      });
+      array = array.sort();
+      for(var i = 0; i < array.length-1; i++) {
+        if(array[i+1] === array[i]) return true;
+      }
+      return false;
+    }
+
     // save this new poll object to MongoDB
     $scope.createPoll = function() {
       var poll = $scope.poll;
       // check question first
       if(poll.question.length <= 0) {
         alert('You must enter a valid question!');
+      } else if(duplicateChoices()) {
+        alert('Duplicate choices are not allowed!');
       } else {
         // create a obj to be saved
         var newPoll = new Poll(poll);
