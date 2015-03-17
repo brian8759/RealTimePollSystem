@@ -12,6 +12,7 @@ var pollControllers = angular.module('pollControllers', ['ngAnimate']);
 // the controller for listing all polls in the database
 pollControllers.controller('PollListController', ['$scope', 'Poll', 'filterFilter', 
   function($scope, Poll, filterFilter) {
+    // retrieve all polls in DB
     $scope.polls = Poll.query();
 
     $scope.itemsPerPage = 6;
@@ -67,8 +68,8 @@ pollControllers.controller('CreateNewPollController', ['$scope', '$location', 'P
 }]);
 
 // the controller for listing the detail info of certain poll
-pollControllers.controller('PollDetailsController', ['$scope', '$routeParams', 'Poll', 'Socket',
-  function($scope, $routeParams, Poll, Socket) {
+pollControllers.controller('PollDetailsController', ['$scope', '$routeParams', '$location', 'Poll', 'Socket',
+  function($scope, $routeParams, $location, Poll, Socket) {
     $scope.poll = Poll.get({ pollId: $routeParams.pollId });
 
     Socket.on('myVote', function(data) {
@@ -96,6 +97,7 @@ pollControllers.controller('PollDetailsController', ['$scope', '$routeParams', '
           choice: userVote
         };
         Socket.emit('send:vote', voteObj);
+        $location.path('polls');
       } else {
         alert('You must to do meaningful vote!');
       }

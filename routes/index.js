@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 });
 
 /* List all the polls in DB */
-router.get('/pollTest/polls', function(req, res) {
+router.get('/pollTest', function(req, res) {
 	// Just do a normal query to MongoDB, find all polls, and do a projection on question
 	Poll.find({}, 'question', function(err, polls) {
 		if(err) {
@@ -78,7 +78,7 @@ router.post('/pollTest', function(req, res) {
 	// create a poll model object to insert into MongoDB
 	var poll = new Poll(pollObj);
 	// save this into MongoDB
-	poll.save(function(err, doc, numAffected) {
+	poll.save(function(err, doc) {
 		if(err || !doc) {
 			res.status(500).json({ status: 'failure' });
 		} else {

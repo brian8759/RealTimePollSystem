@@ -31,6 +31,12 @@
 
 <div ng-show="poll.voted">
 	<table class="result-table">
+		<thead>
+			<tr>
+				<th>Choice</th>
+				<th>Number of Votes</th>
+			</tr>
+		</thead>
 		<tr ng-repeat="choice in poll.choices">
 			<td>{{choice.text}}</td>
 			<td>{{choice.votes.length}}</td>
